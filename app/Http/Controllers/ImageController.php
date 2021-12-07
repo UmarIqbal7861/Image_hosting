@@ -5,43 +5,40 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\UploadImageValidation;
 use Illuminate\Http\Request;
+use App\Services\DataBaseConnection;
 
 class ImageController extends Controller
 {
     function uploadImage(UploadImageValidation $request)
     {
-        $create = new DataBaseConnection();
-        
-        
-        $uid
-        $data = $request -> file('photo');
-        $array = (array)$data;
-        $name = $array["\x00Symfony\Component\HttpFoundation\File\UploadedFile\x00originalName"];
-        $imagesdata = explode('.',$name);
+        try {
+            $create = new DataBaseConnection();
+            $DB = $request -> data['db'];
 
-        $photo = $request -> file('photo') -> store('images');
-        $path = $_SERVER['HTTP_HOST']."/user/storage/".$photo;
+            $uid = $request->data['_id'];
+            $data = $request -> file('photo');
+            $array = (array)$data;
+            $name = $array["\x00Symfony\Component\HttpFoundation\File\UploadedFile\x00originalName"];
+            $imagesdata = explode('.',$name);
 
-        $document = array(
-            'uid' => $uid,
-            'photo' => $path,
-            'date' => date('Y-m-d'),
-            'time' => date('H:i:s'),
-            'name' => $imagesss[0],
-            'extensions' => $imagesss[1],
-            'accessor' => "hidden"
-        );
+            $photo = $request -> file('photo') -> store('images');
+            $path = $_SERVER['HTTP_HOST']."/user/storage/".$photo;
 
-        $create -> connect('images')->insertOne($document);
-
-        $DB->$table->updateMany(array("email"=>$email), array('$set'=> $data));
+            $document = array(
+                'uid' => $uid,
+                'photo' => $path,
+                'date' => date('Y-m-d'),
+                'time' => date('H:i:s'),
+                'name' => $imagesdata[0],
+                'extensions' => $imagesdata[1],
+                'accessor' => "hidden"
+            );
+            $table='images';
+            $create -> connect();
+            $DB->$table->insertOne($document);
             return response()->json(['Message' => 'Profile Update'],200);
-
-
-
-        //date, time, name, extensions, private, public, hidden
-        dd($path);
-        dd($request->data['email']);
-        dd("sd");
+        } catch (\Exception $error) {
+            return response()->json(['Message' => $error -> getMessage()], 500);
+        }
     }
 }

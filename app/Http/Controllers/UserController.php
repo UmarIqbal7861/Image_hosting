@@ -142,8 +142,6 @@ class UserController extends Controller
             $DB = $request -> data['db'];
             $table = $request -> data['table'];
             $email = $request -> data['email'];
-            dd($table);
-            dd($request -> data['_id']);
             
             $data=[];
             if($request->name != NULL) { $data['name'] = $request -> name; }
