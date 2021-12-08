@@ -46,6 +46,9 @@ Route::post('Otp',[UserController::class, 'otpmatch'])->middleware('otp');
 
 Route::post('Newpassword',[UserController::class, 'changePassword']);
 
-Route::post('ProfileUpdate',[UserController::class, 'profileUpdate'])->middleware('Authenticate');
+Route::group(['middleware'=>"Authenticate"],function()
+{
+    Route::post('ProfileUpdate',[UserController::class, 'profileUpdate']);
 
-
+    Route::post('Logout',[UserController::class, 'logout']);
+});

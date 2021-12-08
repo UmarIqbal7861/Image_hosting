@@ -162,4 +162,25 @@ class UserController extends Controller
             return response()->json(['Message' => $error -> getMessage()], 500);
         }
     }
+
+
+    function logout(Request $request)
+    {
+        try {
+            $create=new DataBaseConnection();
+            $DB=$create->connect();
+            $table='users';
+            $update=$DB->$table->updateMany(array("remember_token"=>$request->token), 
+                array('$set'=>array('status'=> 0,'remember_token'=> null)));
+            if(!empty($update))
+            {
+                return response(['Message'=>'Logout']);
+            }
+            else{
+                return response(['Message'=>'Error:::']);
+            }
+        } catch (\Exception $error) {
+            return response()->json(['Message' => $error -> getMessage()], 500);
+        }
+    }
 }

@@ -18,20 +18,25 @@ use App\Http\Controllers\ImageController;
 //     return $request->user();
 // });
 
-Route::any('/storage/images/{filename}',function(Request $request, $filename){
 
-    $headers = ["Cache-Control" => "no-store, no-cache, must-revalidate, max-age=0"];
+Route::group(['middleware'=>"Authenticate"],function()
+{
+    Route::post('Imageupload',[ImageController::class, 'uploadImage']);
 
-    $path = storage_path("app/images".'/'.$filename);
+    Route::post('Removephoto',[ImageController::class, 'removePhoto']);
 
-     if (file_exists($path)) {
+    Route::post('Listallphoto',[ImageController::class, 'listAllPhoto']);
 
-        return response()->download($path, null, $headers, null);
+    Route::post('Searchphoto',[ImageController::class, 'searchPhoto']);
 
-    }
+    Route::post('Createlink',[ImageController::class, 'createPhotoLink']);
 
-    return response()->json(["error"=>"error downloading file"],400);
+    
+    Route::post('Makeaccess',[ImageController::class, 'makeAccessor']);
+    
+    Route::post('Makepublic',[ImageController::class, 'makePublic']);
 
+    Route::post('Makeprivate',[ImageController::class, 'makePrivate']);
+
+    Route::post('Makehidden',[ImageController::class, 'makeHidden']);
 });
-
-Route::post('Imageupload',[ImageController::class, 'uploadImage'])->middleware('Authenticate');

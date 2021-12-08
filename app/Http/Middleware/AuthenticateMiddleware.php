@@ -23,7 +23,6 @@ class AuthenticateMiddleware
         $find = $DB -> $table -> findOne(array(
             'remember_token'=> $request -> token
         ));
-        $email=$find['email'];
         if($find!=NULL) {
             $find['table'] = $table;
             $find['db'] = $DB;
