@@ -30,7 +30,7 @@ class profileValidation extends FormRequest
             'email' => 'email',
             'password' => 'min:8|max:20',
             'age' => 'integer',
-            'profile' => 'mimes:jpeg,jpg,png,gif|max:20000',
+            //'profile' => 'mimes:jpeg,jpg,png,gif|max:20000',
         ];
     }
     public function failedValidation(Validator $validator)

@@ -69,5 +69,6 @@ class Kernel extends HttpKernel
         'forgetpassword' => \App\Http\Middleware\ForgetMiddleware::class,
         'otp' => \App\Http\Middleware\OtpMiddleware::class,
         'Authenticate' => \App\Http\Middleware\AuthenticateMiddleware::class,
+        'addemail' => \App\Http\Middleware\AccessMailMiddleware::class,
     ];
 }

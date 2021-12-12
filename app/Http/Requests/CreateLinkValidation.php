@@ -26,7 +26,7 @@ class CreateLinkValidation extends FormRequest
     public function rules()
     {
         return [
-            'photo' => 'required|mimes:jpeg,jpg,png,gif|required|max:20000'
+            'photo' => 'required|string'
         ];
     }
     public function failedValidation(Validator $validator)

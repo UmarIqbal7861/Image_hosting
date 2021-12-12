@@ -30,7 +30,7 @@ class SignUpValidation extends FormRequest
             'email' => 'required|email',
             'password' => 'required|min:8|max:20',
             'age' => 'required|integer',
-            'profile' => 'required|mimes:jpeg,jpg,png,gif|required|max:20000',
+            //'profile' => 'required|mimes:jpeg,jpg,png,gif|required|max:20000',
         ];
     }
     public function failedValidation(Validator $validator)

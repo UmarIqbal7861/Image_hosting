@@ -3,22 +3,12 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
 
-/*
-|--------------------------------------------------------------------------
-| API Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register API routes for your application. These
-| routes are loaded by the RouteServiceProvider within a group which
-| is assigned the "api" middleware group. Enjoy building your API!
-|
-*/
+        header('Access-Control-Allow-Origin: *');
+        header('Access-Control-Allow-Credentials: true');
+        header('Access-Control-Allow-Headers: *');
+        header('Access-Control-Allow-Method: *');
 
-// Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-//     return $request->user();
-// });
-
-Route::any('/storage/images/{filename}',function(Request $request, $filename){
+Route::any('/storage/app/images/{filename}',function(Request $request, $filename){
 
     $headers = ["Cache-Control" => "no-store, no-cache, must-revalidate, max-age=0"];
 

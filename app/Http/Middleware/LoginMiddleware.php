@@ -24,9 +24,9 @@ class LoginMiddleware
         $find = $DB -> $table -> findOne(array(
             'email'=> $request -> email
         ));
+        
         if($find!=NULL) {
             $verfy =$find['email_verified_at'];
-
             if($verfy!=NULL) {
                 $data = ['table' => $table,'db' => $DB, 'status' => $find['status'], 'password' => $find['password']];
                 return $next($request->merge(['data' => $data]));

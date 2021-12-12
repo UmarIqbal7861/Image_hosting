@@ -17,11 +17,12 @@ class AuthenticateMiddleware
      */
     public function handle(Request $request, Closure $next)
     {
+        $jwt = $request->bearerToken();
         $create = new DataBaseConnection();
         $DB = $create -> connect();
         $table = 'users';
         $find = $DB -> $table -> findOne(array(
-            'remember_token'=> $request -> token
+            'remember_token'=> $jwt
         ));
         if($find!=NULL) {
             $find['table'] = $table;

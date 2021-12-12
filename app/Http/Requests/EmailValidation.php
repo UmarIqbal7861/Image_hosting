@@ -3,6 +3,8 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Contracts\Validation\Validator;
+use Illuminate\Http\Exceptions\HttpResponseException;
 
 class EmailValidation extends FormRequest
 {
@@ -13,7 +15,7 @@ class EmailValidation extends FormRequest
      */
     public function authorize()
     {
-        return false;
+        return true;
     }
 
     /**
@@ -24,7 +26,17 @@ class EmailValidation extends FormRequest
     public function rules()
     {
         return [
-            //
+            'photo' => 'required|string',
+            'email' => 'required|email',
         ];
     }
+    public function failedValidation(Validator $validator)
+    {
+        throw new HttpResponseException(response()->json([
+            'success'   => false,
+            'message'   => 'Validation errors',
+            'data'      => $validator->errors()
+        ]));
+    }
+    protected $stopOnFirstFailure = true;
 }

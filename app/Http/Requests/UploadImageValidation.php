@@ -26,7 +26,7 @@ class UploadImageValidation extends FormRequest
     public function rules()
     {
         return [
-            'photo' => 'required|mimes:jpeg,jpg,png,gif|required|max:20000'
+            //'photo' => 'required|mimes:jpeg,jpg,png,gif|required|max:20000'
         ];
     }
     public function failedValidation(Validator $validator)

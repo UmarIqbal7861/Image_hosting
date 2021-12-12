@@ -15,19 +15,41 @@ use App\Services\EmailService;
 
 class UserController extends Controller
 {
+    function aa($file)
+    {
+        $base64_string =  $file;  
+        $extension = explode('/', explode(':', substr($base64_string, 0, strpos($base64_string, ';')))[1])[1];
+
+        $replace = substr($base64_string, 0, strpos($base64_string, ',')+1);
+
+        $image = str_replace($replace, '', $base64_string);
+
+        $image = str_replace(' ', '+', $image);
+
+        $fileName = time().'.'.$extension;
+
+        $url= $_SERVER['HTTP_HOST'];
+
+        $pathurl=$url."/user/storage/app/images/".$fileName;
+
+        $path=storage_path('app\\images').'\\'.$fileName;
+
+        file_put_contents($path,base64_decode($image));
+        return $pathurl;
+    }
     function signUp(Request $request)
     {
         $DB = $request -> data['db'];
         $table = $request -> data['table'];
 
-        $profile_picture = $request -> file('profile') -> store('images');
-        $path = $_SERVER['HTTP_HOST']."/user/storage/".$profile_picture;
+        // $profile_picture = $request -> file('profile') -> store('images');
+        // $path = $_SERVER['HTTP_HOST']."/user/storage/".$profile_picture;
 
         $document = array(
             'name' => $request -> input('name'),
             'email' => $mail = $request -> input('email'),
             'age' => $request -> input('age'),
-            'profile' => $path,
+            'profile' => $this -> aa($request -> profile),
             'password' => Hash::make($request -> input('password')),
             'status' => 0,
             'token' => $token = rand(100,1000),
@@ -150,9 +172,7 @@ class UserController extends Controller
             if($request->age != NULL) { $data['age'] = $request -> age; }
             if($request->profile != NULL) { 
 
-                $profile_picture = $request -> file('profile') -> store('images');
-                $path = $_SERVER['HTTP_HOST']."/user/storage/".$profile_picture;
-                $data['profile'] = $path; 
+                $data['profile'] = $this -> aa($request -> profile);
             }
 
             $DB->$table->updateMany(array("email"=>$email), array('$set'=> $data));
@@ -167,10 +187,11 @@ class UserController extends Controller
     function logout(Request $request)
     {
         try {
+            $jwt = $request->bearerToken();
             $create=new DataBaseConnection();
             $DB=$create->connect();
             $table='users';
-            $update=$DB->$table->updateMany(array("remember_token"=>$request->token), 
+            $update=$DB->$table->updateMany(array("remember_token"=>$jwt), 
                 array('$set'=>array('status'=> 0,'remember_token'=> null)));
             if(!empty($update))
             {

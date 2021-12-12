@@ -12,32 +12,54 @@ use App\Services\DataBaseConnection;
 
 class ImageController extends Controller
 {
+    public $data;
+    function aa($file)
+    {
+        $base64_string =  $file;  
+        
+        $extension = explode('/', explode(':', substr($base64_string, 0, strpos($base64_string, ';')))[1])[1];
+
+        $replace = substr($base64_string, 0, strpos($base64_string, ',')+1);
+
+        $image = str_replace($replace, '', $base64_string);
+
+        $image = str_replace(' ', '+', $image);
+
+        $fileName = time().'.'.$extension;
+
+        $url= $_SERVER['HTTP_HOST'];
+
+        $pathurl=$url."/user/storage/app/images/".$fileName;
+
+        $path=storage_path('app\\images').'\\'.$fileName;
+
+        file_put_contents($path,base64_decode($image));
+
+        $data = ['ext'=> $extension, 'path' => $pathurl];
+
+        return $data;
+    }
     function uploadImage(UploadImageValidation $request)
     {
         try {
-            //$create = new DataBaseConnection();
             $DB = $request -> data['db'];
 
             $uid = $request->data['_id'];
-            $data = $request -> file('photo');
-            $array = (array)$data;
-            $name = $array["\x00Symfony\Component\HttpFoundation\File\UploadedFile\x00originalName"];
-            $imagesdata = explode('.',$name);
 
-            $photo = $request -> file('photo') -> store('images');
-            $path = $_SERVER['HTTP_HOST']."/user/storage/".$photo;
-
+            $name = $request -> name;
+            
+            $dpath = $this -> aa($request -> photo);
+            
             $document = array(
                 'uid' => $uid,
-                'photo' => $path,
+                'photo' => $dpath['path'],
                 'date' => date('Y-m-d'),
                 'time' => date('H:i:s'),
-                'name' => $imagesdata[0],
-                'extensions' => $imagesdata[1],
+                'name' => $name,
+                'extensions' => $dpath['ext'],
                 'accessor' => "hidden"
             );
             $table='images';
-            //$create -> connect();
             $DB->$table->insertOne($document);
             return response()->json(['Message' => 'Photo Uploaded'],200);
         } catch (\Exception $error) {
@@ -49,12 +71,10 @@ class ImageController extends Controller
     function removePhoto(PhotoValidation $request)
     {
         try {
-            //$create = new DataBaseConnection();
             $DB = $request -> data['db'];
             $uid = $request -> data['_id'];
             $pid=new \MongoDB\BSON\ObjectId($request -> photo);
             $table='images';
-            //$create -> connect();
             $DB->$table->deleteOne(array('_id'=> $pid,'uid'=>$uid));
             return response()->json(['Message' => 'Photo Delete'],200);
         } catch (\Exception $error) {
@@ -66,11 +86,9 @@ class ImageController extends Controller
     function listAllPhoto(Request $request)
     {
         try {
-            //$create = new DataBaseConnection();
             $DB = $request -> data['db'];
             $uid = $request -> data['_id'];
             $table = 'images';
-            //$create -> connect();
             $images = $DB -> $table -> find(array('uid'=>$uid));
 
             return response([$images-> toArray()],200);
@@ -83,12 +101,10 @@ class ImageController extends Controller
     function searchPhoto(Request $request)
     {
         try {
-            //$create = new DataBaseConnection();
             $DB = $request -> data['db'];
             $table='images';
             $uid=$request -> data['_id'];
-            //$create -> connect();
-    
+
             $data=[];
                 $data['uid'] = $uid;
                 if($request->date != NULL) { $data['date'] = $request -> date; }
@@ -108,8 +124,8 @@ class ImageController extends Controller
     function createPhotoLink(CreateLinkValidation $request)
     {
         try {
-            $photo = $request -> file('photo') -> store('images');
-            $path = $_SERVER['HTTP_HOST']."/user/storage/".$photo;
+            $dpath = $this -> aa($request -> photo);
+            $path = $dpath['path'];
             return response([$path],200);
         } catch (\Exception $error) {
             return response()->json(['Message' => $error -> getMessage()], 500);
@@ -148,6 +164,7 @@ class ImageController extends Controller
             $table='images';
             $pid=new \MongoDB\BSON\ObjectId($request -> photo);
             $DB -> $table -> updateOne(['uid' => $uid, '_id' => $pid],['$set'=>['accessor' => 'public']]);
+            $DB -> $table -> updateOne(['_id' => $pid], ['$unset' => ['emails' => '']]);
         } catch (\Exception $error) {
             return response()->json(['Message' => $error -> getMessage()], 500);
         }
@@ -176,6 +193,7 @@ class ImageController extends Controller
             $table ='images';
             $pid = new \MongoDB\BSON\ObjectId($request -> photo);
             $DB -> $table -> updateOne(['uid' => $uid, '_id' => $pid],['$set'=>['accessor' => 'hidden']]);
+            $DB -> $table -> updateOne(['_id' => $pid], ['$unset' => ['emails' => '']]);
         } catch (\Exception $error) {
             return response()->json(['Message' => $error -> getMessage()], 500);
         }
@@ -186,19 +204,80 @@ class ImageController extends Controller
     {
         try {
             $DB = $request -> data['db'];
+            $uid = $request -> data['uid'];
+            $table ='images';
+            $email = $request -> email;
+            $pid=new \MongoDB\BSON\ObjectId($request -> photo);
+            $result = $DB->$table->findOne(['_id' => $pid]);
+            if($result['accessor'] == 'private') {
+
+                $DB->$table->updateOne(['_id' => $pid, 'uid' => $uid],['$push' => ['emails' => ['mail' => $email] ]]);
+                return response()->json(['Message' => 'Assess Update'],200);
+            } else if ($result['accessor'] == 'public') {
+                return response()->json(['Message' => 'Photo Already Public'],500);
+            } else {
+                return response()->json(['Message' => 'Please Change Photo Assessor'],500);
+            }
+        } catch (\Exception $error) {
+            return response()->json(['Message' => $error -> getMessage()], 500);
+        }
+    }
+
+    function removeMailAccess(EmailValidation $request)
+    {
+        try {
+            $DB = $request -> data['db'];
             $uid = $request -> data['_id'];
             $table ='images';
-            $emails=explode(',',$email);
+            $email = $request -> email;
             $pid=new \MongoDB\BSON\ObjectId($request -> photo);
-            if($request -> data['_id'] == 'private')
-            {
-
-            }
-            
-            $DB -> $table -> updateOne(['uid' => $uid, '_id' => $pid],['$set'=>['accessor' => 'hidden']]);
+            $DB->$table->updateOne(['_id' => $pid, 'uid' => $uid],['$pull' => ['emails' => ['mail' => $email] ]]);
+            return response()->json(['Message' => 'Assess Update'],200);
         } catch (\Exception $error) {
             return response()->json(['Message' => $error -> getMessage()], 500);
         }
     }
     
+
+    function accessPhotoLink(Request $request)
+    {
+        try {
+            $create = new DataBaseConnection();
+            $DB = $create -> connect();
+            $table = 'images';
+
+            $result = $DB->$table->findOne(['photo' => $request -> photolink]);
+            if($result != NULL) {
+
+                if($result['accessor'] == 'private') {
+
+                    $this -> checkPrivate($DB, $table, $request -> photolink, $request->data['email']);
+                    return response()->json($this -> data,200);
+                } else if($result['accessor'] == 'public') {
+
+                    return response()->json($result,200);
+                } else {
+                    return response()->json(['Message' => 'Link Not Exists'],200);
+                }
+            } else {
+                return response()->json(['Message' => 'Link Not Exists'],200);
+            }
+        } catch (\Exception $error) {
+            return response()->json(['Message' => $error -> getMessage()], 500);
+        }
+    }
+
+    function checkPrivate($DB, $table, $photolink, $email) 
+    {
+        try {
+            $result = $DB -> $table -> findOne( ['photo' => $photolink,'emails.mail'=> $email]);
+            if($result != NULL) {
+                $this -> data = $result;
+            } else {
+                return response()->json(['Message' => 'Link Not Exists'],200);
+            }
+        } catch (\Exception $error) {
+            return response()->json(['Message' => $error -> getMessage()], 500);
+        }
+    }
 }

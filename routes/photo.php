@@ -31,8 +31,13 @@ Route::group(['middleware'=>"Authenticate"],function()
 
     Route::post('Createlink',[ImageController::class, 'createPhotoLink']);
 
-    
     Route::post('Makeaccess',[ImageController::class, 'makeAccessor']);
+
+    Route::post('Assessphoto',[ImageController::class, 'assessPhoto']) -> middleware ('addemail');
+
+    Route::post('Removemail',[ImageController::class, 'removeMailAccess']);
+
+    Route::post('AccessThroughLink',[ImageController::class, 'accessPhotoLink']);
     
     Route::post('Makepublic',[ImageController::class, 'makePublic']);
 
