@@ -13,7 +13,7 @@ use App\Services\DataBaseConnection;
 class ImageController extends Controller
 {
     public $data;
-    function aa($file)
+    function base_64_conversion($file)
     {
         $base64_string =  $file;  
         
@@ -48,7 +48,7 @@ class ImageController extends Controller
 
             $name = $request -> name;
             
-            $dpath = $this -> aa($request -> photo);
+            $dpath = $this -> base_64_conversion($request -> photo);
             
             $document = array(
                 'uid' => $uid,
@@ -124,7 +124,7 @@ class ImageController extends Controller
     function createPhotoLink(CreateLinkValidation $request)
     {
         try {
-            $dpath = $this -> aa($request -> photo);
+            $dpath = $this -> base_64_conversion($request -> photo);
             $path = $dpath['path'];
             return response([$path],200);
         } catch (\Exception $error) {

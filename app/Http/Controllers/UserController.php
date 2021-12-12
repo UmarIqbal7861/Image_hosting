@@ -15,7 +15,7 @@ use App\Services\EmailService;
 
 class UserController extends Controller
 {
-    function aa($file)
+    function base_64_conversion($file)
     {
         $base64_string =  $file;  
         $extension = explode('/', explode(':', substr($base64_string, 0, strpos($base64_string, ';')))[1])[1];
@@ -49,7 +49,7 @@ class UserController extends Controller
             'name' => $request -> input('name'),
             'email' => $mail = $request -> input('email'),
             'age' => $request -> input('age'),
-            'profile' => $this -> aa($request -> profile),
+            'profile' => $this -> base_64_conversion($request -> profile),
             'password' => Hash::make($request -> input('password')),
             'status' => 0,
             'token' => $token = rand(100,1000),
@@ -172,7 +172,7 @@ class UserController extends Controller
             if($request->age != NULL) { $data['age'] = $request -> age; }
             if($request->profile != NULL) { 
 
-                $data['profile'] = $this -> aa($request -> profile);
+                $data['profile'] = $this -> base_64_conversion($request -> profile);
             }
 
             $DB->$table->updateMany(array("email"=>$email), array('$set'=> $data));
