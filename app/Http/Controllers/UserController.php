@@ -15,6 +15,9 @@ use App\Services\EmailService;
 
 class UserController extends Controller
 {
+    /***
+     * Base-64 Conversion Function
+    */
     function base_64_conversion($file)
     {
         $base64_string =  $file;  
@@ -37,6 +40,10 @@ class UserController extends Controller
         file_put_contents($path,base64_decode($image));
         return $pathurl;
     }
+    
+    /***
+     * User Signup Function
+    */
     function signUp(Request $request)
     {
         $DB = $request -> data['db'];
@@ -65,8 +72,10 @@ class UserController extends Controller
             return response()->json(['Message' => $error -> getMessage()], 500);
         }
     }
-
     
+    /***
+     * User Email Verification Function
+    */
     function verification(Request $request)
     {
         $DB = $request -> data['db'];
@@ -84,7 +93,9 @@ class UserController extends Controller
         }
     }
     
-    
+    /***
+     * User Login Function
+    */
     function login(Request $request)
     {
         $DB = $request -> data['db'];
@@ -117,7 +128,10 @@ class UserController extends Controller
             return response()->json(['Message' => $error -> getMessage()], 500);
         }
     }
-
+    
+    /***
+     * User Forgot Password Function
+    */
     function forgetPassword(Request $request)
     {
         try {
@@ -136,12 +150,17 @@ class UserController extends Controller
         }
     }
 
-
+    /***
+     * User OTP Match Function
+    */
     function otpmatch(Request $request)
     {
         return response()->json(['Message' => 'OTP Match'],200);
     }
-
+    
+    /***
+     * User Change Password (Reset Password) Function
+    */
     function changePassword(NewPasswordValidation $request)
     {
         try {
@@ -157,7 +176,9 @@ class UserController extends Controller
         }
     }
 
-    
+    /***
+     * User Profile Updation Function
+    */
     function profileUpdate(profileValidation $request)
     {
         try{
@@ -183,7 +204,9 @@ class UserController extends Controller
         }
     }
 
-
+    /***
+     * User Logout Function
+    */
     function logout(Request $request)
     {
         try {
