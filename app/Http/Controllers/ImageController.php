@@ -12,6 +12,9 @@ use App\Services\DataBaseConnection;
 
 class ImageController extends Controller
 {
+    /***
+     * Base-64 Conversion Function
+    */
     public $data;
     function base_64_conversion($file)
     {
@@ -39,6 +42,10 @@ class ImageController extends Controller
 
         return $data;
     }
+
+    /***
+     * User Uploads Image / Picture / Photo Function
+    */    
     function uploadImage(UploadImageValidation $request)
     {
         try {
@@ -67,7 +74,9 @@ class ImageController extends Controller
         }
     }
 
-
+    /***
+     * User Removes Image Function
+    */
     function removePhoto(PhotoValidation $request)
     {
         try {
@@ -82,7 +91,9 @@ class ImageController extends Controller
         }
     }
 
-
+    /***
+     * User Shows All Images
+    */
     function listAllPhoto(Request $request)
     {
         try {
@@ -97,7 +108,9 @@ class ImageController extends Controller
         }
     }
 
-
+    /***
+     * User Search Image Function
+    */
     function searchPhoto(Request $request)
     {
         try {
@@ -120,7 +133,9 @@ class ImageController extends Controller
         }
     }
 
-
+    /***
+     * Image Link Generate Function
+    */
     function createPhotoLink(CreateLinkValidation $request)
     {
         try {
@@ -132,7 +147,9 @@ class ImageController extends Controller
         }
     }
 
-
+    /***
+     * Allow Private Image Access Function
+    */
     function makeAccessor(PhotoValidation $request)
     {
         try {
@@ -155,7 +172,9 @@ class ImageController extends Controller
         }
     }
 
-
+    /***
+     * Make Image Public Function
+    */
     function  makePublic(PhotoValidation $request)
     {
         try {
@@ -170,7 +189,9 @@ class ImageController extends Controller
         }
     }
 
-
+    /***
+     * Make Image Private Function
+    */
     function makePrivate(PhotoValidation $request)
     {
         try {
@@ -184,7 +205,9 @@ class ImageController extends Controller
         }
     }
 
-
+    /***
+     * Make Image Hindden Function
+    */
     function makeHidden(PhotoValidation $request)
     {
         try {
@@ -199,7 +222,9 @@ class ImageController extends Controller
         }
     }
 
-
+    /***
+     * Image Access Function
+    */
     function assessPhoto(EmailValidation $request)
     {
         try {
@@ -223,6 +248,9 @@ class ImageController extends Controller
         }
     }
 
+    /***
+     * Remove Access For Private Image Function
+    */    
     function removeMailAccess(EmailValidation $request)
     {
         try {
@@ -238,7 +266,9 @@ class ImageController extends Controller
         }
     }
     
-
+    /***
+     * Access Image Link Function
+    */
     function accessPhotoLink(Request $request)
     {
         try {
@@ -267,6 +297,9 @@ class ImageController extends Controller
         }
     }
 
+    /***
+     * Check Image Access Type Function
+    */
     function checkPrivate($DB, $table, $photolink, $email) 
     {
         try {

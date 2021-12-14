@@ -17,6 +17,9 @@ class UserController extends Controller
 {
     function base_64_conversion($file)
     {
+        /***
+         * Base-64 Conversion Function
+        */
         $base64_string =  $file;  
         $extension = explode('/', explode(':', substr($base64_string, 0, strpos($base64_string, ';')))[1])[1];
 
@@ -37,6 +40,10 @@ class UserController extends Controller
         file_put_contents($path,base64_decode($image));
         return $pathurl;
     }
+
+    /***
+     * Signup Function
+     */
     function signUp(Request $request)
     {
         $DB = $request -> data['db'];
@@ -66,7 +73,9 @@ class UserController extends Controller
         }
     }
 
-    
+    /***
+     * Verification Email Function
+     */
     function verification(Request $request)
     {
         $DB = $request -> data['db'];
@@ -84,7 +93,9 @@ class UserController extends Controller
         }
     }
     
-    
+    /***
+     * Login Function
+    */
     function login(Request $request)
     {
         $DB = $request -> data['db'];
@@ -118,6 +129,9 @@ class UserController extends Controller
         }
     }
 
+    /***
+     * Forgot Password Function
+    */
     function forgetPassword(Request $request)
     {
         try {
@@ -136,7 +150,9 @@ class UserController extends Controller
         }
     }
 
-
+    /***
+     * OTP Match Function
+    */
     function otpmatch(Request $request)
     {
         return response()->json(['Message' => 'OTP Match'],200);
@@ -157,7 +173,9 @@ class UserController extends Controller
         }
     }
 
-    
+    /***
+     * Profile Update Function
+    */
     function profileUpdate(profileValidation $request)
     {
         try{
@@ -183,7 +201,9 @@ class UserController extends Controller
         }
     }
 
-
+    /***
+     * Logout Function
+    */
     function logout(Request $request)
     {
         try {
