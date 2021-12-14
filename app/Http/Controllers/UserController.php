@@ -15,11 +15,12 @@ use App\Services\EmailService;
 
 class UserController extends Controller
 {
+    /***
+     * Base-64 Conversion Function
+    */
     function base_64_conversion($file)
     {
-        /***
-         * Base-64 Conversion Function
-        */
+        
         $base64_string =  $file;  
         $extension = explode('/', explode(':', substr($base64_string, 0, strpos($base64_string, ';')))[1])[1];
 
@@ -41,12 +42,6 @@ class UserController extends Controller
         return $pathurl;
     }
 
-<<<<<<< HEAD
-    /***
-     * Signup Function
-     */
-=======
->>>>>>> d4589defa5e26910a5235dd17e7ffe15f4e104b6
     function signUp(Request $request)
     {
         $DB = $request -> data['db'];
@@ -75,15 +70,7 @@ class UserController extends Controller
             return response()->json(['Message' => $error -> getMessage()], 500);
         }
     }
-<<<<<<< HEAD
 
-    /***
-     * Verification Email Function
-     */
-=======
-    
-
->>>>>>> d4589defa5e26910a5235dd17e7ffe15f4e104b6
     function verification(Request $request)
     {
         $DB = $request -> data['db'];
@@ -100,14 +87,11 @@ class UserController extends Controller
             return response()->json(['Message' => $error -> getMessage()], 500);
         }
     }
-    
-<<<<<<< HEAD
-    /***
-     * Login Function
-    */
-=======
 
->>>>>>> d4589defa5e26910a5235dd17e7ffe15f4e104b6
+    /**
+     * login user with email and password
+     */
+    
     function login(Request $request)
     {
         $DB = $request -> data['db'];
@@ -171,7 +155,9 @@ class UserController extends Controller
         return response()->json(['Message' => 'OTP Match'],200);
     }
     
-
+    /**
+     * change password with new and conform password 
+     */
     function changePassword(NewPasswordValidation $request)
     {
         try {
@@ -186,14 +172,9 @@ class UserController extends Controller
             return response()->json(['Message' => $error -> getMessage()], 500);
         }
     }
-
-<<<<<<< HEAD
-    /***
-     * Profile Update Function
-    */
-=======
-
->>>>>>> d4589defa5e26910a5235dd17e7ffe15f4e104b6
+    /**
+     * user profile update
+     */
     function profileUpdate(profileValidation $request)
     {
         try{
