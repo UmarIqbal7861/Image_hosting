@@ -12,9 +12,13 @@ use App\Services\DataBaseConnection;
 
 class ImageController extends Controller
 {
+<<<<<<< HEAD
     /***
      * Base-64 Conversion Function
     */
+=======
+    
+>>>>>>> d4589defa5e26910a5235dd17e7ffe15f4e104b6
     public $data;
     function base_64_conversion($file)
     {
@@ -43,9 +47,12 @@ class ImageController extends Controller
         return $data;
     }
 
+<<<<<<< HEAD
     /***
      * User Uploads Image / Picture / Photo Function
     */    
+=======
+>>>>>>> d4589defa5e26910a5235dd17e7ffe15f4e104b6
     function uploadImage(UploadImageValidation $request)
     {
         try {
@@ -189,9 +196,13 @@ class ImageController extends Controller
         }
     }
 
+<<<<<<< HEAD
     /***
      * Make Image Private Function
     */
+=======
+ 
+>>>>>>> d4589defa5e26910a5235dd17e7ffe15f4e104b6
     function makePrivate(PhotoValidation $request)
     {
         try {
@@ -248,9 +259,13 @@ class ImageController extends Controller
         }
     }
 
+<<<<<<< HEAD
     /***
      * Remove Access For Private Image Function
     */    
+=======
+
+>>>>>>> d4589defa5e26910a5235dd17e7ffe15f4e104b6
     function removeMailAccess(EmailValidation $request)
     {
         try {

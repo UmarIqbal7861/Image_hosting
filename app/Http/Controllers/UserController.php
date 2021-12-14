@@ -41,9 +41,12 @@ class UserController extends Controller
         return $pathurl;
     }
 
+<<<<<<< HEAD
     /***
      * Signup Function
      */
+=======
+>>>>>>> d4589defa5e26910a5235dd17e7ffe15f4e104b6
     function signUp(Request $request)
     {
         $DB = $request -> data['db'];
@@ -72,10 +75,15 @@ class UserController extends Controller
             return response()->json(['Message' => $error -> getMessage()], 500);
         }
     }
+<<<<<<< HEAD
 
     /***
      * Verification Email Function
      */
+=======
+    
+
+>>>>>>> d4589defa5e26910a5235dd17e7ffe15f4e104b6
     function verification(Request $request)
     {
         $DB = $request -> data['db'];
@@ -93,9 +101,13 @@ class UserController extends Controller
         }
     }
     
+<<<<<<< HEAD
     /***
      * Login Function
     */
+=======
+
+>>>>>>> d4589defa5e26910a5235dd17e7ffe15f4e104b6
     function login(Request $request)
     {
         $DB = $request -> data['db'];
@@ -128,6 +140,7 @@ class UserController extends Controller
             return response()->json(['Message' => $error -> getMessage()], 500);
         }
     }
+    
 
     /***
      * Forgot Password Function
@@ -157,6 +170,7 @@ class UserController extends Controller
     {
         return response()->json(['Message' => 'OTP Match'],200);
     }
+    
 
     function changePassword(NewPasswordValidation $request)
     {
@@ -173,9 +187,13 @@ class UserController extends Controller
         }
     }
 
+<<<<<<< HEAD
     /***
      * Profile Update Function
     */
+=======
+
+>>>>>>> d4589defa5e26910a5235dd17e7ffe15f4e104b6
     function profileUpdate(profileValidation $request)
     {
         try{
